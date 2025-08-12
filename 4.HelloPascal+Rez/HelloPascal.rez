@@ -1,0 +1,3 @@
+#include "types.rez"
+
+resource rPString (1, noCrossBank) {"AAAAAAAAAA"};
