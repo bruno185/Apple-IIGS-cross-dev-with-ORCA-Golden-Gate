@@ -126,7 +126,7 @@ def main():
     
     # Delete intermediate files
     print("\nCleaning intermediate files...")
-    intermediate_files = [f"{PRG}.a", f"{PRG}.root", f"{PRG}.sym"]
+    intermediate_files = [f"{PRG}.a", f"{PRG}.root", f"{PRG}.sym", f"{PRG}.B"]
     for file in intermediate_files:
         if os.path.exists(file):
             os.remove(file)
