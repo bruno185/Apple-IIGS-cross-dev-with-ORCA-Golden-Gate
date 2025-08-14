@@ -69,6 +69,16 @@ def check_required_tools():
     print("✓ All required tools found!")
     print()
 
+
+def cleanup_intermediate_files():
+    print("\nCleaning intermediate files...")
+    intermediate_files = [f"{PRG}.a", f"{PRG}.root", f"{PRG}.sym", f"{PRG}.B"]
+    for file in intermediate_files:
+        if os.path.exists(file):
+            os.remove(file)
+            print(f"Deleted: {file}")
+
+
 def main():
     # --------------- Check Required Tools ---------------
     check_required_tools()
@@ -123,15 +133,8 @@ def main():
                 if not run_command(f"iix export cadius {PRG}", "Exporting resource with Cadius format"):
                     print("WARNING: Export failed, will copy executable directly")
                     has_resources = False
-    
-    # Delete intermediate files
-    print("\nCleaning intermediate files...")
-    intermediate_files = [f"{PRG}.a", f"{PRG}.root", f"{PRG}.sym", f"{PRG}.B"]
-    for file in intermediate_files:
-        if os.path.exists(file):
-            os.remove(file)
-            print(f"Deleted: {file}")
-    
+
+
     # --------------- Cadius Disk Operations ---------------
     print("=" * 50)
     print("           Cadius Disk Operations")
@@ -146,24 +149,46 @@ def main():
         sys.exit(1)
     # Delete existing file from disk (ignore errors)
     print(f"Removing existing {file_to_copy} from disk...")
-    subprocess.run(f'Cadius.exe DELETEFILE "{AppleDiskPath}" {ProdosDir}{file_to_copy}', 
-                  shell=True, capture_output=True)
+    result = subprocess.run(
+        f'Cadius.exe DELETEFILE "{AppleDiskPath}" {ProdosDir}{file_to_copy}',
+        shell=True, capture_output=True, text=True
+    )
+    output = result.stdout + result.stderr
+    if output:
+        print(output)
+    if "error" in output.lower():
+        print("Erreur détectée dans la sortie Cadius (DELETEFILE).")
+        cleanup_intermediate_files()
+
     # Add new file to disk
-    if not run_command(f'Cadius.exe ADDFILE "{AppleDiskPath}" {ProdosDir} .\\{file_to_copy}', 
-                      "Adding executable file to Apple disk"):
+    result = subprocess.run(
+        f'Cadius.exe ADDFILE "{AppleDiskPath}" {ProdosDir} .\\{file_to_copy}',
+        shell=True, capture_output=True, text=True
+    )
+    output = result.stdout + result.stderr
+    if output:
+        print(output)
+    if "error" in output.lower():
+        print("Erreur détectée dans la sortie Cadius (ADDFILE).")
+        cleanup_intermediate_files()
         sys.exit(1)
-    
+
+    cleanup_intermediate_files()
+    print()
+
     # --------------- Done ---------------
     print("=" * 50)
-    print("           Compilation Complete!")
+    print("               ✅   SUCCÈS   ✅")
+    print("            Compilation Complete!")
     print("=" * 50)
+
 
     if has_resources:
         print(f"Program {PRG} with resources successfully compiled and deployed!")
     else:
         print(f"Program {PRG} successfully compiled and deployed!")
-
     print(f"Deployed to: {AppleDiskPath}{ProdosDir}")
+    print("=" * 50 + "\n")
 
 if __name__ == "__main__":
     try:
