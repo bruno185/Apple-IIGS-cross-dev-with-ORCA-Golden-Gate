@@ -1,4 +1,4 @@
-program Hello (input,output);
+program HelloPascal (input,output);
 uses Common, QuickDrawII, ResourceMgr;
 
 begin

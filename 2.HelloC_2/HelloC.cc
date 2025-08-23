@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <asm.h>
 
-// hello.mac is not used
+extern void keypress(void);
+extern void debug(void);
 
 int main() {
         
@@ -17,3 +17,5 @@ int main() {
 
         return 0;
 }
+#append "HelloC.asm"
+

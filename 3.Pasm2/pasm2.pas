@@ -1,5 +1,5 @@
 { Demonstrate calling assembly language functions from Pascal. }
-program FunctionIt (output);
+program pasm2 (output);
 function reverse (a: integer): integer; extern;
 procedure keypress; extern;
 

@@ -1,4 +1,4 @@
-program Hello (input,output);
+program HelloPascalR (input,output);
 uses Common, QuickDrawII, ResourceMgr;
 const
       rPString = $8006;
@@ -47,7 +47,6 @@ begin
 end;
 
 
-
 begin
         StartGraph(320);
         PenNormal;
@@ -74,4 +73,5 @@ begin
         readln;  { Wait for user input before closing the program }
 
         EndGraph;
-        end.
+end.
+
