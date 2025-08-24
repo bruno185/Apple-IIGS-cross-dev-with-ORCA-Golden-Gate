@@ -25,9 +25,9 @@ int main() {
 
         printf("\n");
         a_C_var = 0;
-         printf("Value of a C variable : %08lx\n", a_C_var);
+         printf("Value of a C variable : $%lx\n", a_C_var);
         pokeValue(); // asm routine : pokes $12345678 in a_C_var C var
-        printf("New value of C var modified by assembly routine : %08lx\n", a_C_var);
+        printf("New value of C var modified by assembly routine : $%08lx\n", a_C_var);
 
         printf("\n");
         char my_string[50] = "test string";
@@ -42,6 +42,7 @@ int main() {
         li = dblong(li);
         printf("Value x 2 by assembly routine : %ld\n", li);
 
+		printf("\n");
         printf("Press any key to quit...\n");
         clear();
         keypress();             // asm function to check for keypress
