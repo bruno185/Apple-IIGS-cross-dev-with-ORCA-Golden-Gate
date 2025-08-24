@@ -8,6 +8,7 @@ extern int dbint(int);
 extern long dblong(long);
 extern long debug4(long);
 extern void pokeValue(void);
+extern long uppers(long);
 
 long a_C_var;
 
@@ -25,7 +26,7 @@ int main() {
 
         printf("\n");
         a_C_var = 0;
-         printf("Value of a C variable : $%lx\n", a_C_var);
+        printf("Value of a C variable : $%lx\n", a_C_var);
         pokeValue(); // asm routine : pokes $12345678 in a_C_var C var
         printf("New value of C var modified by assembly routine : $%08lx\n", a_C_var);
 
@@ -42,7 +43,15 @@ int main() {
         li = dblong(li);
         printf("Value x 2 by assembly routine : %ld\n", li);
 
-		printf("\n");
+        printf("\n");
+        printf("My string value = %s\n", my_string);
+        debug();
+        li = uppers((long)my_string);              // convert string to uppercase via assembly routine
+        printf("My string address caught by assembly routine: $%lx\n", li);
+        printf("My string value uppercased by assembly routine = %s\n", my_string);
+
+
+        printf("\n");
         printf("Press any key to quit...\n");
         clear();
         keypress();             // asm function to check for keypress
@@ -51,6 +60,5 @@ int main() {
 
         return 0;
 }
-
 #append "H.asm"
 

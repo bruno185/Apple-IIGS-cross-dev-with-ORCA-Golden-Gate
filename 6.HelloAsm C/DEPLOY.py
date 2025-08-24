@@ -115,7 +115,7 @@ def main():
     print("=" * 50)
     
     # Compile the program
-    if not run_command(f"iix compile {PRG}{lang}", "Compiling Pascal source"):
+    if not run_command(f"iix compile +L {PRG}{lang} > {PRG}.lst", "Compiling Pascal source"):
         sys.exit(1)
     
     # Link the program

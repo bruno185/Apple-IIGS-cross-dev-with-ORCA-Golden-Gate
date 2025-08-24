@@ -345,14 +345,13 @@ Dans cet exemple, le fichier "HelloPascal.bat" effectue les mêmes opérations d
 
 ### Exemple 5 : programme en Pascal passage de données avec des fonctions en assemebleur
 Cet exemple est dans le répertoire "5.Pasm3".
-Le programme en Pascal passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions sont  illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
+Le programme en Pascal passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
 
 ### Exemple 6 : programme en C passage de données avec des fonctions en assemebleur
-Cet exemple est dans le répertoire "6.HelloAsm C".
-Le programme en C passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions sont illustrent le passage de paramètres entre le code en C compilé par ORCA/C et le code en assembleur compilé par ORCA/M.
-
-
-
+Cet exemple est dans le répertoire "6.HelloAsm C", il est très similaire à l'exemple précédent.
+Le programme en C passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/C et le code en assembleur compilé par ORCA/M. 
+La fonction uppers met en majuscule une vaarible C de type string.
+Enfin, DEPLOY.py a été complété pour générer le listing du programme "HelloAsmC.lst" (ligne 118), ce qui est souvent nécessaire pour le débogage du code assembleur.
 
 ## Conclusion
 

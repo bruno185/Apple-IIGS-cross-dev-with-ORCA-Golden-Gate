@@ -1,0 +1,713 @@
+ORCA/C 2.2.1
+
+   1 #include <stdio.h>
+   1 /****************************************************************
+   2 *
+   3 *  stdio.h - input/output facilities
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989, 1993, 1996
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __stdio__
+  14 #define __stdio__
+  15 
+  16 /*
+  17  *  Misc.
+  18  */
+  19 
+  20 #ifndef __va_list__
+  21 #define __va_list__
+  22 typedef char *__va_list[2];
+  23 #endif
+  24 
+  25 #ifndef EOF
+  26 #define EOF             (-1)
+  27 #endif
+  28 
+  29 #ifndef NULL
+  30 #define NULL  (void *) 0L
+  31 #endif
+  32 
+  33 #ifndef __size_t__
+  34 #define __size_t__ 1
+  35 typedef unsigned long size_t;
+  36 #endif
+  37 
+  38 /* seek codes */
+  39 
+  40 #define SEEK_SET        0
+  41 #define SEEK_CUR        1
+  42 #define SEEK_END        2
+  43 
+  44 /*
+  45  *  Error handling
+  46  */
+  47 
+  48 #ifndef __KeepNamespacePure__
+  49    extern int sys_nerr;                    /* largest index for sys_errlist */
+  50    extern char *sys_errlist[];             /* error messages */
+  51 #endif
+  52 
+  53 /*
+  54  *  files
+  55  */
+  56 
+  57 typedef struct __file {
+  58    struct __file        *next;          /* next file in linked list */
+  59    unsigned char        *_ptr,          /* next location to write to */
+  60                         *_base,         /* first byte of the buffer */
+  61                         *_end;          /* end of the file buffer */
+  62    unsigned long        _size,          /* size of the file buffer */
+  63                         _cnt;           /* # chars that can be read/written to buffer */
+  64    int                  _pbk[2];        /* put back buffer */
+  65    unsigned int         _flag,          /* buffer flags */
+  66                         _file;          /* GS/OS file ID */
+  67    } FILE;
+  68 
+  69 #define BUFSIZ          1024            /* default buffer size */
+  70 #define _LBUFSIZ        255             /* line buffer size */
+  71 
+  72 #define _IOFBF          0x0001          /* full buffering */
+  73 #define _IONBF          0x0002          /* no buffering */
+  74 #define _IOLBF          0x0004          /* flush when a \n is written */
+  75 #define _IOREAD         0x0008          /* currently reading */
+  76 #define _IOWRT          0x0010          /* currently writing */
+  77 #define _IORW           0x0020          /* read/write enabled */
+  78 #define _IOMYBUF        0x0040          /* buffer was allocated by stdio */
+  79 #define _IOEOF          0x0080          /* has an EOF been found? */
+  80 #define _IOERR          0x0100          /* has an error occurred? */
+  81 #define _IOTEXT         0x0200          /* is this file a text file? */
+  82 #define _IOTEMPFILE     0x0400          /* was this file created by tmpfile()? */
+  83 #define _IOAPPEND       0x0800          /* is this file open in append mode? */
+  84 
+  85 extern FILE *stderr;                    /* standard I/O files */
+  86 extern FILE *stdin;
+  87 extern FILE *stdout;
+  88 #define stderr          stderr
+  89 #define stdin           stdin
+  90 #define stdout          stdout
+  91 
+  92 #define L_tmpnam        26              /* size of a temp name */
+  93 #define TMP_MAX         10000           /* # of unique temp names */
+  94 #ifndef __KeepNamespacePure__
+  95    #define SYS_OPEN        32767           /* max # open files */
+  96 #endif
+  97 #define FOPEN_MAX       32767           /* max # open files */
+  98 #define FILENAME_MAX    1024            /* recommended file name length */
+  99 
+ 100 /*
+ 101  *  Other types
+ 102  */
+ 103 
+ 104 typedef long fpos_t;
+ 105 
+ 106 /*
+ 107  *  Function declarations
+ 108  */
+ 109 
+ 110 void            clearerr(FILE *);
+ 111 int             fclose(FILE *);
+ 112 int             feof(FILE *);
+ 113 int             ferror(FILE *);
+ 114 int             fflush(FILE *);
+ 115 int             fgetc(FILE *);
+ 116 int             fgetpos(FILE *, fpos_t *);
+ 117 char           *fgets(char *, int, FILE *);
+ 118 FILE           *fopen(const char *, const char *);
+ 119 int             fprintf(FILE *, const char *, ...);
+ 120 int             fputc(int, FILE *);
+ 121 int             fputs(const char *, FILE *);
+ 122 size_t          fread(void *, size_t, size_t, FILE *);
+ 123 FILE           *freopen(const char *, const char *, FILE *);
+ 124 int             fscanf(FILE *, const char *, ...);
+ 125 int             fseek(FILE *, long, int);
+ 126 int             fsetpos(FILE *, const fpos_t *);
+ 127 long int        ftell(FILE *);
+ 128 size_t          fwrite(const void *, size_t, size_t, FILE *);
+ 129 int             getc(FILE *);
+ 130 int             getchar(void);
+ 131 #if !defined(__KeepNamespacePure__) || __STDC_VERSION__ < 201112L
+ 132 char           *gets(char *);
+ 133 #endif
+ 134 void            perror(const char *);
+ 135 int             printf(const char *, ...);
+ 136 int             putc(int, FILE *);
+ 137 int             putchar(int);
+ 138 int             puts(const char *);
+ 139 int             remove(const char *);
+ 140 int             rename(const char *, const char *);
+ 141 void            rewind(FILE *);
+ 142 int             scanf(const char *, ...);
+ 143 void            setbuf(FILE *, char *);
+ 144 int             setvbuf(FILE *, char *, int, size_t);
+ 145 int             sprintf(char *, const char *, ...);
+ 146 int             snprintf(char *, size_t, const char *, ...);
+ 147 int             sscanf(const char *, const char *, ...);
+ 148 FILE           *tmpfile(void);
+ 149 char           *tmpnam(char *);
+ 150 int             ungetc(int c, FILE *);
+ 151 int             vfprintf(FILE *, const char *, __va_list);
+ 152 int             vfscanf(FILE *, const char *, __va_list);
+ 153 int             vprintf(const char *, __va_list);
+ 154 int             vscanf(const char *, __va_list);
+ 155 int             vsprintf(char *, const char *, __va_list);
+ 156 int             vsnprintf(char *, size_t, const char *, __va_list);
+ 157 int             vsscanf(const char *, const char *, __va_list);
+ 158 
+ 159 #endif
+   2 #include <stdlib.h> // for rand()
+   1 /****************************************************************
+   2 *
+   3 *  stdlib.h - standard library functions
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __stdlib__
+  14 #define __stdlib__
+  15 
+  16 #ifndef NULL
+  17 #define NULL (void *) 0L
+  18 #endif
+  19 
+  20 #ifndef __size_t__
+  21 #define __size_t__ 1
+  22 typedef unsigned long size_t;
+  23 #endif
+  24 
+  25 #define RAND_MAX        32767
+  26 #define EXIT_FAILURE    (-1)
+  27 #define EXIT_SUCCESS    0
+  28 #define MB_CUR_MAX      1UL
+  29 
+  30 typedef struct {int quot,rem;} div_t;
+  31 typedef struct {long quot,rem;} ldiv_t;
+  32 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  33 typedef struct {long long quot,rem;} lldiv_t;
+  34 #endif
+  35 
+  36 #ifndef __KeepNamespacePure__
+  37    #define clalloc(x,y)    calloc((x),(y))
+  38    #define cfree(x)        free(x)
+  39    #define mlalloc(x)      malloc(x)
+  40    #define relalloc(x,y)   realloc((x),(y))
+  41 #endif
+  42 
+  43 int             abs(int);
+  44 void            abort(void);
+  45 void           *aligned_alloc(size_t, size_t);
+  46 int             atexit(void (*__func)(void));
+  47 int             at_quick_exit(void (*__func)(void));
+  48 double          atof(const char *);
+  49 int             atoi(const char *);
+  50 long            atol(const char *);
+  51 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  52 long long       atoll(const char *);
+  53 #endif
+  54 void           *bsearch(const void *, const void *, size_t, size_t, int (*__compar)(const void *, const void *));
+  55 void           *calloc(size_t, size_t);
+  56 div_t           div(int, int);
+  57 void            exit(int);
+  58 void            _exit(int);
+  59 void            _Exit(int);
+  60 void            free(void *);
+  61 char           *getenv(const char *);
+  62 long            labs(long);
+  63 ldiv_t          ldiv(long, long);
+  64 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  65 long long       llabs(long long);
+  66 lldiv_t         lldiv(long long, long long);
+  67 #endif
+  68 void           *malloc(size_t);
+  69 int             mblen(const char *, size_t);
+  70 void            qsort(void *, size_t, size_t, int (*__compar)(const void *, const void *));
+  71 void            quick_exit(int);
+  72 int             rand(void);
+  73 void           *realloc(void *, size_t);
+  74 void            srand(unsigned);
+  75 double          strtod(const char *, char **);
+  76 float           strtof(const char *, char **);
+  77 long double     strtold(const char *, char **);
+  78 long            strtol(const char *, char **, int);
+  79 unsigned long   strtoul(const char *, char **, int);
+  80 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  81 long long       strtoll(const char * restrict, char ** restrict, int);
+  82 unsigned long long strtoull(const char * restrict, char ** restrict, int);
+  83 #endif
+  84 int             system(const char *);
+  85 
+  86 #endif
+   3 
+   4 extern void clear(void);
+   5 extern void keypress(void);
+   6 extern void debug(void);
+   7 extern int dbint(int);
+   8 extern long dblong(long);
+   9 extern long debug4(long);
+  10 extern void pokeValue(void);
+  11 extern long uppers(long);
+  12 
+  13 long a_C_var;
+  14 
+  15 int main() {
+  16         
+  17         int i;
+  18         long li;
+  19 
+  20         printf("Hello, C World!\n");
+  21         printf("\n");
+  22 
+  23         i = 1234; // get random integer
+  24         printf("Integer value in C program : %d\n", i);
+  25         printf("Value x 2 by assembly routine : %d\n", dbint(i)); // call dbint with variable
+  26 
+  27         printf("\n");
+  28         a_C_var = 0;
+  29         printf("Value of a C variable : $%lx\n", a_C_var);
+  30         pokeValue(); // asm routine : pokes $12345678 in a_C_var C var
+  31         printf("New value of C var modified by assembly routine : $%08lx\n", a_C_var);
+  32 
+  33         printf("\n");
+  34         char my_string[50] = "test string";
+  35         printf("My string value = %s\n", my_string);
+  36         printf("My string address in C : %p\n", (void*)my_string);
+  37         printf("My string address returned by assembly routine : %lx\n", debug4((long)my_string));
+  38         printf("My string address poked by assembly routine in a C var : %lx\n", a_C_var);
+  39 
+  40         printf("\n");
+  41         li = 12345;
+  42         printf("Value of a long variable : %ld\n", li);
+  43         li = dblong(li);
+  44         printf("Value x 2 by assembly routine : %ld\n", li);
+  45 
+  46         printf("\n");
+  47         printf("My string value = %s\n", my_string);
+  48         debug();
+  49         li = uppers((long)my_string);              // convert string to uppercase via assembly routine
+  50         printf("My string address caught by assembly routine: $%lx\n", li);
+  51         printf("My string value uppercased by assembly routine = %s\n", my_string);
+  52 
+  53 
+  54         printf("\n");
+  55         printf("Press any key to quit...\n");
+  56         clear();
+  57         keypress();             // asm function to check for keypress
+  58         printf("\f");           //clears the screen via a ‘formfeed’
+  59         printf("Goodbye!\n");
+  60 
+  61         return 0;
+  62 }
+  63 #append "H.asm"
+
+0 errors found.
+
+ORCA/M Asm65816 2.1.0
+ 
+0001 0000                      case on 
+0002 0000               
+0003 0000              ; **************************************************** 
+0004 0000              ; Clear the keyboard strobe 
+0005 0000              ; 
+0006 0000              clear   start 
+0007 0000 E2 20                sep #$20 
+0008 0002 8F 10 C0 00          sta >$C010 
+0009 0006 C2 20                rep #$20 
+0010 0008 6B                   rtl 
+0011 0009                      end 
+0012 0000               
+0013 0000              ; **************************************************** 
+0014 0000              ; Wait for a keypress 
+0015 0000              keypress        START 
+0016 0000 E2 30                        sep #$30 
+0017 0002 8F 10 C0 00                  sta >$00C010 
+0018 0006              loop2           anop 
+0019 0006 AF 00 C0 00                  lda >$00C000     ; Read the keyboard status from memory address 0xC000 
+0020 000A 10 FA                        bpl loop2        ; If not pressed, loop until a key is pressed 
+0021 000C C2 30                        rep #$30 
+0022 000E 6B                           rtl 
+0023 000F                              END 
+0024 0000               
+0025 0000               
+0026 0000              ; **************************************************** 
+0027 0000              ; To use with an emulator. 
+0028 0000              ; With Crossrunner, you can set a breakpoint to break when 
+0029 0000              ; registers have specific values. For instance : 0xAAAA in register A 
+0030 0000              ; and 0xBBBB in register X. 
+0031 0000              debug   START 
+0032 0000 48                   pha 
+0033 0001 DA                   phx 
+0034 0002 A9 AA AA             lda #$AAAA 
+0035 0005 A2 BB BB             ldx #$BBBB      ; will break after this instruction if you set a breakpoint 
+0036 0008 FA                   plx             ; restore X 
+0037 0009 68                   pla             ; restore A 
+0038 000A 6B                   rtl             ; return from subroutine 
+0039 000B                      END 
+0040 0000               
+0041 0000               
+0042 0000              ; **************************************************** 
+0043 0000              ; Get 2 bytes value from parameter, double it, return it 
+0044 0000              ; 
+0045 0000              dbint START 
+0046 0000              parm     equ   4                        ;passed parameter 
+0047 0000              ret      equ   1                        ;return address (3 bytes) 
+0048 0000               
+0049 0000 3B                   tsc             ;record current stack pointer 
+0050 0001 0B                   phd             ;save old DP 
+0051 0002 5B                   tcd             ;set new DP to stack pointer 
+0052 0003               
+0053 0003 A5 04                lda parm        ; get parameter 
+0054 0005 0A                   asl A 
+0055 0006 AA                   tax             ; save in X 
+0056 0007 A5 02                 lda ret+1 
+0057 0009 85 04                sta parm 
+0058 000B A5 00                lda ret-1 
+0059 000D 85 02                sta ret+1 
+0060 000F 2B                   pld             ; restore old DP 
+0061 0010 68                   pla             ; set up stack for return from subroutine 
+0062 0011 8A                   txa             ; put the function result in A 
+0063 0012 6B                   rtl 
+0064 0013                      END 
+0065 0000               
+0066 0000               
+0067 0000              ; **************************************************** 
+0068 0000              ; get 4 bytes value in X/A (hi/lo words) 
+0069 0000              ; poke it in a C variable (a_C_var) 
+0070 0000              ; and return value 
+0071 0000              ; 
+0073 0000              debug4 START 
+0074 0000              parm     equ     4                      ; passed parameter 
+0075 0000              ret      equ     1                      ; return address 
+0076 0000               
+0077 0000 3B                   tsc             ;record current stack pointer 
+0078 0001 0B                   phd             ;save old DP 
+0079 0002 5B                   tcd             ;set new DP to stack pointer 
+0080 0003               
+0081 0003 A4 04                ldy parm        ; save in Y (least significant word) 
+0082 0005 A6 06                ldx parm+2      ; save in X (most significant word) 
+0083 0007               
+0084 0007 A5 02                 lda ret+1 
+0085 0009 85 06                sta parm+2 
+0086 000B A5 00                lda ret-1 
+0087 000D 85 04                sta parm 
+0088 000F               
+0089 000F 2B                   pld             ; restore old DP 
+0090 0010 68                   pla             ; set up stack for return from subroutine 
+0091 0011 68                   pla 
+0092 0012               
+0093 0012 8E 02 80             stx a_C_var+2   ; poke value in a C vat 
+0094 0015 8C 00 80             sty a_C_var 
+0095 0018               
+0096 0018 98                   tya             ; restore least significant word (most significant word is already in X) 
+0097 0019               
+0098 0019 6B                   rtl 
+0099 001A                      END 
+0100 0000               
+0101 0000              ; **************************************************** 
+0102 0000              ; Poke a value into the C variable (a_C_var) 
+0103 0000              ; 
+0104 0000              pokeValue  start 
+0105 0000 A9 78 56             lda #$5678 
+0106 0003 8D 00 80             sta a_C_var 
+0107 0006 A0 34 12             ldy #$1234 
+0108 0009 8C 02 80             sty a_C_var+2 
+0109 000C 6B                   rtl 
+0110 000D                      end 
+0111 0000               
+0112 0000              ; **************************************************** 
+0113 0000              ; Get 4 bytes value from parameter, double it, return it 
+0114 0000              ; 
+0115 0000              dblong  START 
+0116 0000              parm     equ   4                        ; passed parameter 
+0117 0000              ret      equ    1                       ; return address 
+0118 0000               
+0119 0000 3B                   tsc             ; record current stack pointer 
+0120 0001 0B                   phd             ; save old DP 
+0121 0002 5B                   tcd             ; set new DP to stack pointer 
+0122 0003               
+0123 0003 A5 04                lda parm        ; save in Y (least significant word) 
+0124 0005 0A                   asl A 
+0125 0006 A8                   tay 
+0126 0007 A5 06                lda parm+2      ; save in X (most significant word) 
+0127 0009 2A                   rol A 
+0128 000A AA                   tax 
+0129 000B               
+0130 000B A5 02                 lda ret+1 
+0131 000D 85 06                sta parm+2 
+0132 000F A5 00                lda ret-1 
+0133 0011 85 04                sta parm 
+0134 0013               
+0135 0013 2B                   pld             ; restore old DP 
+0136 0014 68                   pla             ; set up stack for return from subroutine 
+0137 0015 68                   pla 
+0138 0016               
+0139 0016 98                   tya             ; restore least significant word 
+0140 0017 6B                   rtl 
+0141 0018                      END 
+0142 0000               
+0143 0000               
+0144 0000              ; **************************************************** 
+0145 0000              ; Uppercase a string 
+0146 0000              ; Return address of string 
+0147 0000              ; 
+0148 0000              uppers  START 
+0149 0000              parm     equ        4                   ; passed parameter 
+0150 0000              ret      equ         1                  ; return address 
+0151 0000               
+0152 0000 3B                   tsc             ; record current stack pointer 
+0153 0001 0B                   phd             ; save old DP 
+0154 0002 5B                   tcd             ; set new DP to stack pointer 
+0155 0003               
+0156 0003 A5 04                lda parm 
+0157 0005 8D 3A 00             sta straddres 
+0158 0008 A5 06                lda parm+2 
+0159 000A 8D 3C 00             sta straddres+2 
+0160 000D               
+0161 000D E2 20                sep #$20 
+0162 000F A0 00 00             ldy #0 
+0163 0012                      LONGA OFF 
+0164 0012              loopstr anop 
+0165 0012 B7 04                lda [parm],Y 
+0166 0014 F0 10                beq endstr 
+0167 0016 C9 61                cmp #$61 
+0168 0018 90 09                bcc nextc 
+0169 001A C9 7B                cmp #$7B 
+0170 001C B0 05                bcs nextc 
+0171 001E 38           okchar  sec 
+0172 001F E9 20                sbc #32 
+0173 0021               
+0174 0021 97 04                sta [parm],Y 
+0175 0023 C8           nextc   iny 
+0176 0024 80 EC                bra loopstr 
+0177 0026              endstr  anop 
+0178 0026                      LONGA ON 
+0179 0026 C2 30                rep #$30 
+0180 0028               
+0181 0028 A5 02                 lda ret+1 
+0182 002A 85 06                sta parm+2 
+0183 002C A5 00                lda ret-1 
+0184 002E 85 04                sta parm 
+0185 0030               
+0186 0030 2B                   pld             ; restore old DP 
+0187 0031 68                   pla             ; set up stack for return from subroutine 
+0188 0032 68                   pla 
+0189 0033               
+0190 0033 AD 3A 00             lda straddres 
+0191 0036 AE 3C 00             ldx straddres+2 
+0192 0039               
+0193 0039 6B                   rtl 
+0194 003A 00 00 00 00  straddres DS  4 
+0195 003E                      END 
+0196 0000               
+0197 0000               
+0198 0000               
+0199 0000               
+0200 0000               
+0201 0000               
+0202 0000               
+0203 0000               
+0204 0000               
+0205 0000               
+0206 0000               
+0207 0000               
+0208 0000               
+0209 0000               
+0210 0000               
+0211 0000               
+0212 0000               
+0213 0000               
+0214 0000               
+0215 0000               
+0216 0000               
+0217 0000               
+0218 0000               
+0219 0000               
+0220 0000               
+0221 0000               
+0222 0000               
+0223 0000               
+0224 0000               
+0225 0000               
+0226 0000               
+0227 0000               
+0228 0000               
+0229 0000               
+0230 0000               
+0231 0000               
+0232 0000               
+0233 0000               
+0234 0000               
+0235 0000               
+0236 0000               
+0237 0000               
+0238 0000               
+0239 0000               
+0240 0000               
+0241 0000               
+0242 0000               
+0243 0000               
+0244 0000               
+0245 0000               
+0246 0000               
+0247 0000               
+0248 0000               
+0249 0000               
+0250 0000               
+0251 0000               
+0252 0000               
+0253 0000               
+0254 0000               
+0255 0000               
+0256 0000               
+0257 0000               
+0258 0000               
+0259 0000               
+0260 0000               
+0261 0000               
+0262 0000               
+0263 0000               
+0264 0000               
+0265 0000               
+0266 0000               
+0267 0000               
+0268 0000               
+0269 0000               
+0270 0000               
+0271 0000               
+0272 0000               
+0273 0000               
+0274 0000               
+0275 0000               
+0276 0000               
+0277 0000               
+0278 0000               
+0279 0000               
+0280 0000               
+0281 0000               
+0282 0000               
+0283 0000               
+0284 0000               
+0285 0000               
+0286 0000               
+0287 0000               
+0288 0000               
+0289 0000               
+0290 0000               
+0291 0000               
+0292 0000               
+0293 0000               
+0294 0000               
+0295 0000               
+0296 0000               
+0297 0000               
+0298 0000               
+0299 0000               
+0300 0000               
+0301 0000               
+0302 0000               
+0303 0000               
+0304 0000               
+0305 0000               
+0306 0000               
+0307 0000               
+0308 0000               
+0309 0000               
+0310 0000               
+0311 0000               
+0312 0000               
+0313 0000               
+0314 0000               
+0315 0000               
+0316 0000               
+0317 0000               
+0318 0000               
+0319 0000               
+0320 0000               
+0321 0000               
+0322 0000               
+0323 0000               
+0324 0000               
+0325 0000               
+0326 0000               
+0327 0000               
+0328 0000               
+0329 0000               
+0330 0000               
+0331 0000               
+0332 0000               
+0333 0000               
+0334 0000               
+0335 0000               
+0336 0000               
+0337 0000               
+0338 0000               
+0339 0000               
+0340 0000               
+0341 0000               
+0342 0000               
+0343 0000               
+0344 0000               
+0345 0000               
+0346 0000               
+0347 0000               
+0348 0000               
+0349 0000               
+0350 0000               
+0351 0000               
+0352 0000               
+0353 0000               
+0354 0000               
+0355 0000               
+0356 0000               
+0357 0000               
+0358 0000               
+0359 0000               
+0360 0000               
+0361 0000               
+0362 0000               
+0363 0000               
+0364 0000               
+0365 0000               
+0366 0000               
+0367 0000               
+0368 0000               
+0369 0000               
+0370 0000               
+0371 0000               
+0372 0000               
+0373 0000               
+0374 0000               
+0375 0000               
+0376 0000               
+0377 0000               
+0378 0000               
+0379 0000               
+0380 0000               
+0381 0000               
+0382 0000               
+0383 0000               
+0384 0000               
+0385 0000               
+0386 0000               
+0387 0000               
+0388 0000               
+0389 0000               
+0390 0000               
+0391 0000               
+0392 0000               
+0393 0000               
+0394 0000               
+ 
+394 source lines
+0 macros expanded
+0 lines generated
+

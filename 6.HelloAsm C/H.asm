@@ -43,8 +43,8 @@ debug   START
 ; Get 2 bytes value from parameter, double it, return it
 ;
 dbint START
-parm	equ	4	passed parameter
-ret	equ	1	return address (3 bytes)
+parm	equ	4	;passed parameter
+ret	equ	1	;return address (3 bytes)
 	
         tsc             ;record current stack pointer
         phd             ;save old DP
@@ -71,8 +71,8 @@ ret	equ	1	return address (3 bytes)
 ;
 .import a_C_var    
 debug4 START
-parm	equ	4	; passed parameter
-ret	equ    1	; return address
+parm	equ     4	; passed parameter
+ret	equ     1	; return address
 
         tsc             ;record current stack pointer
         phd             ;save old DP
@@ -139,4 +139,59 @@ ret	equ    1	; return address
         tya             ; restore least significant word
         rtl
         END
+
+
+; ****************************************************
+; Uppercase a string
+; Return address of string
+;
+uppers  START
+parm	equ        4	; passed parameter
+ret	equ         1	; return address
+
+        tsc             ; record current stack pointer
+        phd             ; save old DP
+        tcd             ; set new DP to stack pointer
+
+        lda parm
+        sta straddres
+        lda parm+2
+        sta straddres+2
+
+        sep #$20
+        ldy #0
+        LONGA OFF
+loopstr anop
+        lda [parm],Y
+        beq endstr
+        cmp #$61
+        bcc nextc
+        cmp #$7B
+        bcs nextc
+okchar  sec
+        sbc #32
+
+        sta [parm],Y
+nextc   iny
+        bra loopstr
+endstr  anop
+        LONGA ON
+        rep #$30
+
+	lda ret+1
+        sta parm+2
+        lda ret-1
+        sta parm
+
+        pld             ; restore old DP
+        pla             ; set up stack for return from subroutine
+        pla 
+
+        lda straddres
+        ldx straddres+2
+
+        rtl
+straddres DS  4
+        END
+
 
