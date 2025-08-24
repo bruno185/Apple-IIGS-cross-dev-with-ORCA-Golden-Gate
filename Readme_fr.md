@@ -246,7 +246,7 @@ def main():
             has_resources = False
         else:
             # Create archive to preserve resource fork
-                if not run_command(f"iix export cadius {PRG}", "Exporting resource with Cadius format"):
+                if not run_command(f"iix rexport -i cadius {PRG}", "Exporting resource with Cadius format"):
                     print("WARNING: Export failed, will copy executable directly")
                     has_resources = False
 
@@ -337,15 +337,15 @@ Cet exemple est dans le répertoire "4.HelloPascal+Rez".
 4. Copie sur l’image disque : réalisée automatiquement par le script (Cadius).
 5. Test dans l’émulateur : une fois le programme copié, il peut être lancé dans KEGS ou Crossrunner.
 
-L'étape 3 a été ajoutée par rapport aux exemples précédents. Quand la présence d'un fichier .rez est détectée, la commande Golden Gate "iix export cadius {programname_name}" extrait la ressource du programme compilé et lié pour créer ce fichier resource binaire séparé nommé {programname_name}_ResourceFork.bin (HelloPascal_ResourceFork.bin dans cet exemple). Ainsi, la commande Cadius ADDFILE pourra écrire sur l'image disque l'exécutable complet, avec sa ressource. Cela n'aurait pas été le cas sans la création du fichier {programname_name}_ResourceFork.bin dans le même répertoire que le fichier {programname_name}.
+L'étape 3 a été ajoutée par rapport aux exemples précédents. Quand la présence d'un fichier .rez est détectée, la commande Golden Gate "iix rexport cadius {programname_name}" extrait la ressource du programme compilé et lié pour créer ce fichier resource binaire séparé nommé {programname_name}_ResourceFork.bin (HelloPascal_ResourceFork.bin dans cet exemple). Ainsi, la commande Cadius ADDFILE pourra écrire sur l'image disque l'exécutable complet, avec sa ressource. Cela n'aurait pas été le cas sans la création du fichier {programname_name}_ResourceFork.bin dans le même répertoire que le fichier {programname_name}.
 
-Par ailleurs, la commande "iix export cadius {programname_name}" peut générer le fichier "_FileInformation.txt" nécessaire pour que la commande "Cadius ADDDFILE {programname_name}", grace à l'option "-i" dans la ligne de commande.
+Grace à l'option "-i" dans la ligne de la commande "iix rexport -i cadius {programname_name}", le fichier "_FileInformation.txt" est généré. Il est nécessaire pour le commande qui suit : "Cadius ADDDFILE {programname_name}".
 
 Dans cet exemple, le fichier "HelloPascal.bat" effectue les mêmes opérations de déploiement que le script Python, de façon beaucoup plus simple et directe, et sans vérifications.
 
 ### Exemple 5 : programme en Pascal passage de données avec des fonctions en assemebleur
 Cet exemple est dans le répertoire "5.Pasm3".
-Le programme en Pascal passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
+Le programme en Pascal passe des paramètres à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
 
 ### Exemple 6 : programme en C passage de données avec des fonctions en assemebleur
 Cet exemple est dans le répertoire "6.HelloAsm C", il est très similaire à l'exemple précédent.

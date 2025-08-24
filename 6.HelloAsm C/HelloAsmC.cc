@@ -60,5 +60,5 @@ int main() {
 
         return 0;
 }
-#append "H.asm"
+#append "HelloAsmC.asm"
 

@@ -336,9 +336,9 @@ This example is in the "4.HelloPascal+Rez" directory.
 4. Copy to disk image: performed automatically by the script (Cadius).
 5. Test in emulator: once the program is copied, it can be launched in KEGS or Crossrunner.
 
-Step 3 was added compared to previous examples. When a .rez file is detected, the Golden Gate command "iix export cadius {programname_name}" extracts the resource from the compiled and linked program to create this separate binary resource file named {programname_name}_ResourceFork.bin (HelloPascal_ResourceFork.bin in this example). Thus, the Cadius ADDFILE command can write the complete executable, with its resource, to the disk image. This would not have been the case without creating the {programname_name}_ResourceFork.bin file in the same directory as the {programname_name} file.
+Step 3 was added compared to previous examples. When a .rez file is detected, the Golden Gate command "iix rexport cadius {programname_name}" extracts the resource from the compiled and linked program to create this separate binary resource file named {programname_name}_ResourceFork.bin (HelloPascal_ResourceFork.bin in this example). Thus, the Cadius ADDFILE command can write the complete executable, with its resource, to the disk image. This would not have been possible without creating the {programname_name}_ResourceFork.bin file in the same directory as the {programname_name} file.
 
-Moreover, the command "iix export cadius {programname_name}" can generate the required "_FileInformation.txt" file for the "Cadius ADDDFILE {programname_name}" command, thanks to the "-i" option in the command line.
+Thanks to the "-i" option in the command line "iix rexport -i cadius {programname_name}", the "_FileInformation.txt" file is generated. It is required for the following command: "Cadius ADDDFILE {programname_name}".
 
 In this example, the "HelloPascal.bat" file performs the same deployment operations as the Python script, in a much simpler and more direct way, and without checks.
 

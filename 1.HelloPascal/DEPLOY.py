@@ -115,7 +115,7 @@ def main():
     print("=" * 50)
     
     # Compile the program
-    if not run_command(f"iix compile {PRG}{lang}", "Compiling Pascal source"):
+    if not run_command(f"iix compile {PRG}{lang}", "Compiling source"):
         sys.exit(1)
     
     # Link the program
@@ -130,7 +130,7 @@ def main():
             has_resources = False
         else:
             # Create archive to preserve resource fork
-                if not run_command(f"iix export cadius {PRG}", "Exporting resource with Cadius format"):
+                if not run_command(f"iix rexport -i cadius {PRG}", "Exporting resource with Cadius format"):
                     print("WARNING: Export failed, will copy executable directly")
                     has_resources = False
 

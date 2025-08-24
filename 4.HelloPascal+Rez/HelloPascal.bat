@@ -25,7 +25,7 @@ rem comile the resource file
 iix compile %PRG%.rez  keep=%PRG%
 
 rem create resource fork
-iix export cadius %PRG% 
+iix rexport -i cadius %PRG% 
 
 rem delete the intermediate files
 del %PRG%.a
