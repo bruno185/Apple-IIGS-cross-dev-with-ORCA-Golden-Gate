@@ -2,67 +2,104 @@ ORCA/C 2.2.1
 
    1 #include <stdio.h>
    2 #include <stdlib.h> // for rand()
-   3 
-   4 extern void clear(void);
-   5 extern void keypress(void);
-   6 extern void debug(void);
-   7 extern int dbint(int);
-   8 extern long dblong(long);
-   9 extern long debug4(long);
-  10 extern void pokeValue(void);
-  11 extern long uppers(long);
-  12 
-  13 long a_C_var;
-  14 
-  15 int main() {
-  16         
-  17         int i;
-  18         long li;
-  19 
-  20         printf("Hello, C World!\n");
-  21         printf("\n");
-  22 
-  23         i = 1234; // get random integer
-  24         printf("Integer value in C program : %d\n", i);
-  25         printf("Value x 2 by assembly routine : %d\n", dbint(i)); // call dbint with variable
-  26 
-  27         printf("\n");
-  28         a_C_var = 0;
-  29         printf("Value of a C variable : $%lx\n", a_C_var);
-  30         pokeValue(); // asm routine : pokes $12345678 in a_C_var C var
-  31         printf("New value of C var modified by assembly routine : $%08lx\n", a_C_var);
+   3 #include <ctype.h>
+   4 #include <time.h>
+   5 #include <string.h>
+   6 
+   7 extern void clear(void);
+   8 extern void keypress(void);
+   9 extern void debug(void);
+  10 extern int dbint(int);
+  11 extern long dblong(long);
+  12 extern long debug4(long);
+  13 extern void pokeValue(void);
+  14 extern long uppers(long);
+  15 
+  16 long a_C_var;
+  17 
+  18 void to_uppercase(char *str) {
+  19     while (*str) {
+  20         *str = toupper((unsigned char)*str);
+  21         str++;
+  22     }
+  23 }
+  24 
+  25 int main() {
+  26         
+  27         int i;
+  28         long li;
+  29         char my_string[100];
+  30 
+  31         strcpy(my_string, "Hello, C World!");
   32 
-  33         printf("\n");
-  34         char my_string[50] = "test string";
-  35         printf("My string value = %s\n", my_string);
-  36         printf("My string address in C : %p\n", (void*)my_string);
-  37         printf("My string address returned by assembly routine : %lx\n", debug4((long)my_string));
-  38         printf("My string address poked by assembly routine in a C var : %lx\n", a_C_var);
+  33         printf("%s\n", my_string);
+  34         printf("\n");
+  35 
+  36         i = 1234; // get random integer
+  37         printf("Integer value in C program : %d\n", i);
+  38         printf("Value x 2 by assembly routine : %d\n", dbint(i)); // call dbint with variable
   39 
   40         printf("\n");
-  41         li = 12345;
-  42         printf("Value of a long variable : %ld\n", li);
-  43         li = dblong(li);
-  44         printf("Value x 2 by assembly routine : %ld\n", li);
+  41         a_C_var = 0;
+  42         printf("Value of a C variable : $%lx\n", a_C_var);
+  43         pokeValue(); // asm routine : pokes $12345678 in a_C_var C var
+  44         printf("New value of C var modified by assembly routine : $%08lx\n", a_C_var);
   45 
   46         printf("\n");
   47         printf("My string value = %s\n", my_string);
-  48         debug();
-  49         li = uppers((long)my_string);              // convert string to uppercase via assembly routine
-  50         printf("My string address caught by assembly routine: $%lx\n", li);
-  51         printf("My string value uppercased by assembly routine = %s\n", my_string);
-  52 
-  53 
-  54         printf("\n");
-  55         printf("Press any key to quit...\n");
-  56         clear();
-  57         keypress();             // asm function to check for keypress
-  58         printf("\f");           //clears the screen via a ‘formfeed’
-  59         printf("Goodbye!\n");
-  60 
-  61         return 0;
-  62 }
-  63 #append "HelloAsmC.asm"
+  48         printf("My string address in C : %p\n", (void*)my_string);
+  49         printf("My string address returned by assembly routine : %lx\n", debug4((long)my_string));
+  50         printf("My string address poked by assembly routine in a C var : %lx\n", a_C_var);
+  51 
+  52         printf("\n");
+  53         li = 12345;
+  54         printf("Value of a long variable : %ld\n", li);
+  55         li = dblong(li);
+  56         printf("Value x 2 by assembly routine : %ld\n", li);
+  57 
+  58         printf("\n");
+  59         printf("My string value = %s\n", my_string);
+  60         debug();
+  61         li = uppers((long)my_string);              // convert string to uppercase via assembly routine
+  62         printf("My string address caught by assembly routine: $%lx\n", li);
+  63         printf("My string value uppercased by assembly routine = %s\n", my_string);
+  64 
+  65         printf("\n");
+  66         
+  67         printf("--------- C vs. Assembly ---------\n");
+  68         printf("C uppercase, press any when ready...\n");
+  69         keypress(); 
+  70 
+  71         clock_t debut = clock();
+  72         for (i=0; i<30000; i++) {
+  73             ;
+  74             to_uppercase(my_string);
+  75         }
+  76         clock_t fin = clock();
+  77         double temps = (double)(fin - debut) / CLOCKS_PER_SEC;
+  78         printf("Time taken by C : %f seconds\n", temps);
+  79         printf("\n");
+  80 
+  81         printf("Assembly uppercase, press any when ready...\n");
+  82         keypress();
+  83         debut = clock(); 
+  84         for (i=0; i<30000; i++) {
+  85             uppers((long)my_string);
+  86         }
+  87         fin = clock();
+  88         double temps2 = (double)(fin - debut) / CLOCKS_PER_SEC;
+  89         printf("Time taken by Assembly : %f seconds\n", temps2);
+  90 
+  91         printf("\n");
+  92         printf("Press any key to quit...\n");
+  93         clear();
+  94         keypress();             // asm function to check for keypress
+  95         printf("\f");           //clears the screen via a ‘formfeed’
+  96         printf("Goodbye!\n");
+  97 
+  98         return 0;
+  99 }
+ 100 #append "HelloAsmC.asm"
 
 0 errors found.
 
