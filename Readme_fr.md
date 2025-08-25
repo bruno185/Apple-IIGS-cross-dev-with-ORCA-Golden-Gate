@@ -9,7 +9,7 @@
 6. Conclusion
 
 ## 1. Introduction
-Ce document s’adresse aux développeurs souhaitant utiliser leur PC pour du cross-développement pour l’Apple IIGS. Son objectif est de présenter un retour d'expérience détaillé sur une solution, <u>parmi d'autres</u>, de cross-développement en langage de 3ᵉ génération (Pascal et C), en utilisant un PC sous Windows et ORCA. Il ne s'agit pas d'une initiation à ces langages de programmation sur Apple IIGS, ni à l'environnement ORCA, mais d'une description des outils et de leur utilisation automatisée grâce à un script Python ou batch. Une connaissance préalable des outils ORCA, des langages Pascal ou C et de l'environnement Apple II est nécessaire.
+Ce document s’adresse aux développeurs souhaitant utiliser leur PC pour du cross-développement pour l’Apple IIGS. Son objectif est de présenter un retour d'expérience détaillé sur une solution, <u>parmi d'autres</u>, de cross-développement en langage de 3ᵉ génération (Pascal et C), en utilisant un PC sous Windows et ORCA. Il ne s'agit pas d'une initiation à ces langages de programmation sur Apple IIGS, ni à l'environnement ORCA, mais d'une description des outils et de leur utilisation automatisée via un script Python ou batch. Une connaissance préalable des outils ORCA, des langages Pascal ou C et de l'environnement Apple II est nécessaire.
 
 NB : Il existe d'autres solutions de cross-développement sur PC vers Apple IIGS, en particulier avec le compilateur Merlin32 pour les projets en assembleur : https://brutaldeluxe.fr/products/crossdevtools/merlin
 
@@ -22,7 +22,7 @@ NB : Il existe d'autres solutions de cross-développement sur PC vers Apple IIGS
 - **Python** : utilisé pour compiler et lier les fichiers sources via un script, mais non obligatoire (batch ou PowerShell possible, voir exemple 4). https://www.python.org
 
 
-## 3. Prérequis spécifiques au cross développement Apple IIGS
+## 3. Prérequis spécifiques au cross-développement Apple IIGS
 
 - **Émulateur Apple IIGS** : 
 
@@ -32,9 +32,9 @@ NB : Il existe d'autres solutions de cross-développement sur PC vers Apple IIGS
 
 NB : Tester sur un vrai Apple IIGS reste indispensable.
 
-- **ORCA (Byte Works)** : environnement complet de développement pour Apple II, compilateurs pour plusieurs langages (Assembleur, C, Pascal, Modula, Basic, etc.). Disponible dans le package OPUS II : https://juiced.gs/store/opus-ii-software, payant. Permet de compiler et des lier tous types de programmes pour Apple IIGS. 
+- **ORCA (Byte Works)** : environnement complet de développement pour Apple II, compilateurs pour plusieurs langages (Assembleur, C, Pascal, Modula, Basic, etc.). Disponible dans le package OPUS II : https://juiced.gs/store/opus-ii-software, payant. Il permet de compiler et de lier tous types de programmes pour Apple IIGS. 
 
-- **Golden Gate (Kelvin Sherlock)** : couche de compatibilité pour ORCA (et GNO/ME), permet d'exécuter les programmes ORCA sur PC pour Apple IIGS : https://juiced.gs/store/golden-gate/, payant. L'installation de Golden Gate met à jour automatiquement la variable d'environnement PATH de Windows. Sert d’interface entre les outils ORCA et l’environnement Windows et permet donc le cross développement.
+- **Golden Gate (Kelvin Sherlock)** : couche de compatibilité pour ORCA (et GNO/ME), permet d'exécuter les programmes ORCA sur PC pour Apple IIGS : https://juiced.gs/store/golden-gate/, payant. L'installation de Golden Gate met à jour automatiquement la variable d'environnement PATH de Windows. Sert d’interface entre les outils ORCA et l’environnement Windows et permet donc le cross-développement.
 
 - **Ciderpress II (faddenSoft)** : application Windows gratuite pour créer et travailler avec les images disques pour Apple II de différents formats : https://ciderpress2.com
 
@@ -42,7 +42,7 @@ NB : Tester sur un vrai Apple IIGS reste indispensable.
 - **Cadius (Brutal Deluxe)** : outil en ligne de commande pour gérer les fichiers d'image disque Apple II sous Windows. Permet notamment d’ajouter, supprimer ou modifier des fichiers sur une image disque : https://www.brutaldeluxe.fr/products/crossdevtools/cadius
 Il est beaucoup plus pratique que le fichier "Cadius.exe" soit dans le PATH Windows pour pouvoir être exécuté depuis n'importe quel répertoire. Il n'y a pas de programme d'installation, c'est à l'utilisateur de s'en assurer s'il le souhaite.
 
-- **une image disque avec un OS (GS/OS)** : nécessaire pour démarrer l'émulateur et lancer le logiciel dans son environnement cible (ProDOS, GS/OS, etc.). Peut être créée notamment avec Ciderpress II, ou récupérée sur un site de téléchargement d'images disques pour Apple II, comme Asimov : https://mirrors.apple2.org.za/ftp.apple.asimov.net. L'images disque système peut être chargée ici :  https://www.macintoshrepository.org/57822-apple-iigs-system-6-0-x par exemple, ou là : https://www.macintoshrepository.org/30859-apple-iigs-hard-drive-image 
+- **une image disque avec un OS (GS/OS)** : nécessaire pour démarrer l'émulateur et lancer le logiciel dans son environnement cible (ProDOS, GS/OS, etc.). Peut être créée notamment avec Ciderpress II, ou récupérée sur un site de téléchargement d'images disques pour Apple II, comme Asimov : https://mirrors.apple2.org.za/ftp.apple.asimov.net. L'image disque système peut être chargée ici :  https://www.macintoshrepository.org/57822-apple-iigs-system-6-0-x par exemple, ou là : https://www.macintoshrepository.org/30859-apple-iigs-hard-drive-image 
 
 
 ## 4. Processus de compilation
@@ -68,7 +68,7 @@ L'étape 4 n'est nécessaire que si le code utilise un fichier de ressources (cf
 - Compilation : adapter les variables de configuration (voir ci-dessous).
 
 - Édition des liens : réalisée automatiquement par le script.
-Copie sur l’image disque : réalisée automatiquement par le script.
+La oopie sur l’image disque est réalisée automatiquement par le script.
 
 - Test dans l’émulateur : une fois le programme copié, il peut être lancé dans KEGS ou Crossrunner.
 
@@ -92,7 +92,7 @@ end.
 
     - Modifier la ligne 19 en remplaçant "C:\\Apple IIgs\\Disks\\System.po" par le path complet vers votre propre image disque comportant un système GS/OS.
 
-    - Modifier la ligne 20 en remplaçant /SYSTEM/ par le prefix de destination sur cet image disque
+    - Modifier la ligne 20 en remplaçant /SYSTEM/ par le prefix de destination sur cette image disque
 
     - les lignes 17 et 18 désignent respectivement le nom du fichier du programme principal et l'extension (.pas, .c, .cc, etc. qui indique à ORCA le langage utilisé et donc le compilateur à mettre en œuvre). Ces 2 lignes sont déjà renseignées correctement pour l'exemple HelloPascal
 
@@ -102,10 +102,10 @@ end.
 
 Pour les compilations ultérieures, il suffit de relancer la commande : "python DEPLOY.py"
 
-#### Que fait le programme python DEPLOY.py ?
+#### Que fait le script Python DEPLOY.py ?
 - Il vérifie que Cadius.exe et iix.exe (exécutable de Golden Gate) sont accessibles, c'est à dire dans le PATH de Windows. Dans le cas contraire, le programme s'arrête avec un message.
 
-- Il rappelle les variables de configuration, définies aux lignes 17 à 20, à adapter à chaque projet. Ce sont les seules informations dont le programme Python a besoin.
+- Il rappelle les variables de configuration, définies aux lignes 17 à 20, à adapter à chaque projet. Ce sont les seules informations dont le script Python a besoin.
     - Il vérifie que le fichier principal est bien présent, ainsi que l'image disque. Dans le cas contraire, le programme s'arrête avec un message. L'absence de fichier de ressource n'est pas bloquante (juste un avertissement), il n'y en a d'ailleurs pas dans l'exemple HelloPascal.
 - Il exécute la compilation par le compilateur ORCA/Pascal, à travers la couche d'émulation Golden Gate par la commande : "iix compile HelloPascal.pas keep=HelloPascal"
     - Il exécute l'édition des liens de l'application, de la même façon par la commande : "iix -DKeepType=S16 link HelloPascal keep=HelloPascal". Cette étape produit l'exécutable au format de l'Apple IIGS (OMF).
@@ -116,7 +116,7 @@ Pour les compilations ultérieures, il suffit de relancer la commande : "python 
 le code python de DEPLOY.py est le suivant : 
 ```python
 #
-# Script Python to comile and deploy a program for Apple IIGS 
+# Script Python to compile and deploy a program for Apple IIGS 
 # using Golden Gate and Cadius
 #
 
@@ -321,39 +321,39 @@ if __name__ == "__main__":
 Cet exemple est présenté sous deux formes différentes dans les répertoires "2.HelloC_1" et "2.HelloC_2".
 Le même script DEPLOY.py que dans l'exemple 1 automatise la compilation et le déploiement, il suffit d'adapter les lignes 17 à 20.
 le programme HelloC fait appel à des fonctions en assembleur codées dans un fichier séparé. 
-Dans "2.HelloC_1", la déclaration "asm" est utilisée et fait appel au mini-assembleur intégré d'ORCA/C, qui permet d'inclure des parties en langage assembleur dans le code C. Dans "2.HelloC_2" le macro assembleur ORCA/M est mis en oeuvre et offre des foncitonnalités beaucoup plus importantes.
+Dans "2.HelloC_1", la déclaration "asm" est utilisée et fait appel au mini-assembleur intégré d'ORCA/C, qui permet d'inclure des parties en langage assembleur dans le code C. Dans "2.HelloC_2" le macro assembleur ORCA/M est mis en oeuvre et offre des fonctionnalités beaucoup plus importantes.
 
 NB : L'appel à la fonction "debug" permet d'interrompre le programme, par exemple, pour exécuter pas à pas le code compilé, dès lors que dans l'émulateur, Crossrunner par exemple, un break a été défini avec les conditions : A = $AAAA et X = $BBBB. On aurait pu choisir d'autres valeurs. 
 
 ### Exemple 3 : programme simple, avec de l'assembleur
-Le répertoire "3.Pasm2" fournit un exemple similaire, en Pascal. Il est repris d'après un exemple donné dans la documentation sur ORACA/Pascal, "Chapter 5 – Writing Assembly Language Subroutines". Le macro assembleur ORCA/M est utilisé.
+Le répertoire "3.Pasm2" fournit un exemple similaire, en Pascal. Il est adapté d’un exemple fourni dans la documentation ORCA/Pascal, "Chapter 5 – Writing Assembly Language Subroutines". Le macro assembleur ORCA/M est utilisé.
 
 ### Exemple 4 : programme en Pascal avec un fichier ressource
 Cet exemple est dans le répertoire "4.HelloPascal+Rez".
 #### Rappel des étapes d'automatisation :
 1. Édition du code : ouvrir le répertoire "4.HelloPascal+Rez" dans Visual Studio Code.
 2. Compilation et édition des liens : réalisées automatiquement par le script Python (ORCA via Golden Gate)
-3. Traitement du fichier ressource : une étape supplémentaire après l'édition des liens est nécessaire car Cadius a besoin d'un fichier supplémentaire, sous la forme {programname_name}_ResourceFork.bin contenant les ressources compilées (binaire).
+3. Traitement du fichier ressource : une étape supplémentaire après l'édition des liens est nécessaire, car Cadius a besoin d'un fichier supplémentaire, sous la forme {programname_name}_ResourceFork.bin contenant les ressources compilées (binaire).
 4. Copie sur l’image disque : réalisée automatiquement par le script (Cadius).
 5. Test dans l’émulateur : une fois le programme copié, il peut être lancé dans KEGS ou Crossrunner.
 
 L'étape 3 a été ajoutée par rapport aux exemples précédents. Quand la présence d'un fichier .rez est détectée, la commande Golden Gate "iix rexport cadius {programname_name}" extrait la ressource du programme compilé et lié pour créer ce fichier resource binaire séparé nommé {programname_name}_ResourceFork.bin (HelloPascal_ResourceFork.bin dans cet exemple). Ainsi, la commande Cadius ADDFILE pourra écrire sur l'image disque l'exécutable complet, avec sa ressource. Cela n'aurait pas été le cas sans la création du fichier {programname_name}_ResourceFork.bin dans le même répertoire que le fichier {programname_name}.
 
-Grace à l'option "-i" dans la ligne de la commande "iix rexport -i cadius {programname_name}", le fichier "_FileInformation.txt" est généré. Il est nécessaire pour le commande qui suit : "Cadius ADDDFILE {programname_name}".
+Grâce à l'option "-i" de la commande "iix rexport -i cadius {programname_name}", le fichier "_FileInformation.txt" est généré. Il est nécessaire pour la commande qui suit : "Cadius ADDFILE {programname_name}".
 
 Dans cet exemple, le fichier "HelloPascal.bat" effectue les mêmes opérations de déploiement que le script Python, de façon beaucoup plus simple et directe, et sans vérifications.
 
-### Exemple 5 : programme en Pascal passage de données avec des fonctions en assemebleur
+### Exemple 5 : programme en Pascal passage de données avec des fonctions en assembleur
 Cet exemple est dans le répertoire "5.Pasm3".
 Le programme en Pascal passe des paramètres à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
 
-### Exemple 6 : programme en C passage de données avec des fonctions en assemebleur
+### Exemple 6 : programme en C passage de données avec des fonctions en assembleur
 Cet exemple est dans le répertoire "6.HelloAsm C", il est très similaire à l'exemple précédent.
-Le programme en C passe des paramètre à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/C et le code en assembleur compilé par ORCA/M. 
-La fonction uppers met en majuscule une vaarible C de type string.
+Le programme en C passe des paramètres à des fonctions en langage assembleur, qui renvoient ensuite des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/C et le code en assembleur compilé par ORCA/M. 
+La fonction uppers met en mettre en majuscule une variable C de type string. Elle est comparée avec son équivalent en C en termes de performances.
 Enfin, DEPLOY.py a été complété pour générer le listing du programme "HelloAsmC.lst" (ligne 118), ce qui est souvent nécessaire pour le débogage du code assembleur.
 
 ## Conclusion
 
-Ce guide propose une méthode complète pour réaliser du cross-développement d’applications Apple IIGS sur PC, en s’appuyant sur des outils modernes et accessibles. En suivant ces étapes, vous pouvez automatiser la compilation, la gestion des images disques et le test de vos programmes de manière efficace. 
+Ce guide propose une méthode complète pour réaliser du cross-développement d’applications Apple IIGS sur PC, en s’appuyant sur des outils modernes et accessibles. En suivant ces étapes, vous pouvez automatiser efficacement la compilation, la gestion des images disques et le test de vos programmes. 
 

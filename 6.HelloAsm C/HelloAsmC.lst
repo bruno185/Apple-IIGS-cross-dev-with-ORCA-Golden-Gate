@@ -1,10 +1,479 @@
 ORCA/C 2.2.1
 
    1 #include <stdio.h>
+   1 /****************************************************************
+   2 *
+   3 *  stdio.h - input/output facilities
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989, 1993, 1996
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __stdio__
+  14 #define __stdio__
+  15 
+  16 /*
+  17  *  Misc.
+  18  */
+  19 
+  20 #ifndef __va_list__
+  21 #define __va_list__
+  22 typedef char *__va_list[2];
+  23 #endif
+  24 
+  25 #ifndef EOF
+  26 #define EOF             (-1)
+  27 #endif
+  28 
+  29 #ifndef NULL
+  30 #define NULL  (void *) 0L
+  31 #endif
+  32 
+  33 #ifndef __size_t__
+  34 #define __size_t__ 1
+  35 typedef unsigned long size_t;
+  36 #endif
+  37 
+  38 /* seek codes */
+  39 
+  40 #define SEEK_SET        0
+  41 #define SEEK_CUR        1
+  42 #define SEEK_END        2
+  43 
+  44 /*
+  45  *  Error handling
+  46  */
+  47 
+  48 #ifndef __KeepNamespacePure__
+  49    extern int sys_nerr;                    /* largest index for sys_errlist */
+  50    extern char *sys_errlist[];             /* error messages */
+  51 #endif
+  52 
+  53 /*
+  54  *  files
+  55  */
+  56 
+  57 typedef struct __file {
+  58    struct __file        *next;          /* next file in linked list */
+  59    unsigned char        *_ptr,          /* next location to write to */
+  60                         *_base,         /* first byte of the buffer */
+  61                         *_end;          /* end of the file buffer */
+  62    unsigned long        _size,          /* size of the file buffer */
+  63                         _cnt;           /* # chars that can be read/written to buffer */
+  64    int                  _pbk[2];        /* put back buffer */
+  65    unsigned int         _flag,          /* buffer flags */
+  66                         _file;          /* GS/OS file ID */
+  67    } FILE;
+  68 
+  69 #define BUFSIZ          1024            /* default buffer size */
+  70 #define _LBUFSIZ        255             /* line buffer size */
+  71 
+  72 #define _IOFBF          0x0001          /* full buffering */
+  73 #define _IONBF          0x0002          /* no buffering */
+  74 #define _IOLBF          0x0004          /* flush when a \n is written */
+  75 #define _IOREAD         0x0008          /* currently reading */
+  76 #define _IOWRT          0x0010          /* currently writing */
+  77 #define _IORW           0x0020          /* read/write enabled */
+  78 #define _IOMYBUF        0x0040          /* buffer was allocated by stdio */
+  79 #define _IOEOF          0x0080          /* has an EOF been found? */
+  80 #define _IOERR          0x0100          /* has an error occurred? */
+  81 #define _IOTEXT         0x0200          /* is this file a text file? */
+  82 #define _IOTEMPFILE     0x0400          /* was this file created by tmpfile()? */
+  83 #define _IOAPPEND       0x0800          /* is this file open in append mode? */
+  84 
+  85 extern FILE *stderr;                    /* standard I/O files */
+  86 extern FILE *stdin;
+  87 extern FILE *stdout;
+  88 #define stderr          stderr
+  89 #define stdin           stdin
+  90 #define stdout          stdout
+  91 
+  92 #define L_tmpnam        26              /* size of a temp name */
+  93 #define TMP_MAX         10000           /* # of unique temp names */
+  94 #ifndef __KeepNamespacePure__
+  95    #define SYS_OPEN        32767           /* max # open files */
+  96 #endif
+  97 #define FOPEN_MAX       32767           /* max # open files */
+  98 #define FILENAME_MAX    1024            /* recommended file name length */
+  99 
+ 100 /*
+ 101  *  Other types
+ 102  */
+ 103 
+ 104 typedef long fpos_t;
+ 105 
+ 106 /*
+ 107  *  Function declarations
+ 108  */
+ 109 
+ 110 void            clearerr(FILE *);
+ 111 int             fclose(FILE *);
+ 112 int             feof(FILE *);
+ 113 int             ferror(FILE *);
+ 114 int             fflush(FILE *);
+ 115 int             fgetc(FILE *);
+ 116 int             fgetpos(FILE *, fpos_t *);
+ 117 char           *fgets(char *, int, FILE *);
+ 118 FILE           *fopen(const char *, const char *);
+ 119 int             fprintf(FILE *, const char *, ...);
+ 120 int             fputc(int, FILE *);
+ 121 int             fputs(const char *, FILE *);
+ 122 size_t          fread(void *, size_t, size_t, FILE *);
+ 123 FILE           *freopen(const char *, const char *, FILE *);
+ 124 int             fscanf(FILE *, const char *, ...);
+ 125 int             fseek(FILE *, long, int);
+ 126 int             fsetpos(FILE *, const fpos_t *);
+ 127 long int        ftell(FILE *);
+ 128 size_t          fwrite(const void *, size_t, size_t, FILE *);
+ 129 int             getc(FILE *);
+ 130 int             getchar(void);
+ 131 #if !defined(__KeepNamespacePure__) || __STDC_VERSION__ < 201112L
+ 132 char           *gets(char *);
+ 133 #endif
+ 134 void            perror(const char *);
+ 135 int             printf(const char *, ...);
+ 136 int             putc(int, FILE *);
+ 137 int             putchar(int);
+ 138 int             puts(const char *);
+ 139 int             remove(const char *);
+ 140 int             rename(const char *, const char *);
+ 141 void            rewind(FILE *);
+ 142 int             scanf(const char *, ...);
+ 143 void            setbuf(FILE *, char *);
+ 144 int             setvbuf(FILE *, char *, int, size_t);
+ 145 int             sprintf(char *, const char *, ...);
+ 146 int             snprintf(char *, size_t, const char *, ...);
+ 147 int             sscanf(const char *, const char *, ...);
+ 148 FILE           *tmpfile(void);
+ 149 char           *tmpnam(char *);
+ 150 int             ungetc(int c, FILE *);
+ 151 int             vfprintf(FILE *, const char *, __va_list);
+ 152 int             vfscanf(FILE *, const char *, __va_list);
+ 153 int             vprintf(const char *, __va_list);
+ 154 int             vscanf(const char *, __va_list);
+ 155 int             vsprintf(char *, const char *, __va_list);
+ 156 int             vsnprintf(char *, size_t, const char *, __va_list);
+ 157 int             vsscanf(const char *, const char *, __va_list);
+ 158 
+ 159 #endif
    2 #include <stdlib.h> // for rand()
+   1 /****************************************************************
+   2 *
+   3 *  stdlib.h - standard library functions
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __stdlib__
+  14 #define __stdlib__
+  15 
+  16 #ifndef NULL
+  17 #define NULL (void *) 0L
+  18 #endif
+  19 
+  20 #ifndef __size_t__
+  21 #define __size_t__ 1
+  22 typedef unsigned long size_t;
+  23 #endif
+  24 
+  25 #define RAND_MAX        32767
+  26 #define EXIT_FAILURE    (-1)
+  27 #define EXIT_SUCCESS    0
+  28 #define MB_CUR_MAX      1UL
+  29 
+  30 typedef struct {int quot,rem;} div_t;
+  31 typedef struct {long quot,rem;} ldiv_t;
+  32 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  33 typedef struct {long long quot,rem;} lldiv_t;
+  34 #endif
+  35 
+  36 #ifndef __KeepNamespacePure__
+  37    #define clalloc(x,y)    calloc((x),(y))
+  38    #define cfree(x)        free(x)
+  39    #define mlalloc(x)      malloc(x)
+  40    #define relalloc(x,y)   realloc((x),(y))
+  41 #endif
+  42 
+  43 int             abs(int);
+  44 void            abort(void);
+  45 void           *aligned_alloc(size_t, size_t);
+  46 int             atexit(void (*__func)(void));
+  47 int             at_quick_exit(void (*__func)(void));
+  48 double          atof(const char *);
+  49 int             atoi(const char *);
+  50 long            atol(const char *);
+  51 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  52 long long       atoll(const char *);
+  53 #endif
+  54 void           *bsearch(const void *, const void *, size_t, size_t, int (*__compar)(const void *, const void *));
+  55 void           *calloc(size_t, size_t);
+  56 div_t           div(int, int);
+  57 void            exit(int);
+  58 void            _exit(int);
+  59 void            _Exit(int);
+  60 void            free(void *);
+  61 char           *getenv(const char *);
+  62 long            labs(long);
+  63 ldiv_t          ldiv(long, long);
+  64 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  65 long long       llabs(long long);
+  66 lldiv_t         lldiv(long long, long long);
+  67 #endif
+  68 void           *malloc(size_t);
+  69 int             mblen(const char *, size_t);
+  70 void            qsort(void *, size_t, size_t, int (*__compar)(const void *, const void *));
+  71 void            quick_exit(int);
+  72 int             rand(void);
+  73 void           *realloc(void *, size_t);
+  74 void            srand(unsigned);
+  75 double          strtod(const char *, char **);
+  76 float           strtof(const char *, char **);
+  77 long double     strtold(const char *, char **);
+  78 long            strtol(const char *, char **, int);
+  79 unsigned long   strtoul(const char *, char **, int);
+  80 #if defined(__ORCAC_HAS_LONG_LONG__) || __STDC_VERSION__ >= 199901L
+  81 long long       strtoll(const char * restrict, char ** restrict, int);
+  82 unsigned long long strtoull(const char * restrict, char ** restrict, int);
+  83 #endif
+  84 int             system(const char *);
+  85 
+  86 #endif
    3 #include <ctype.h>
+   1 /****************************************************************
+   2 *
+   3 *  ctype.h - character types
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __ctype__
+  14 #define __ctype__
+  15 
+  16 extern char __ctype[],__ctype2[];
+  17 
+  18 #define __digit         0x01
+  19 #define __upper         0x02
+  20 #define __lower         0x04
+  21 #define __control       0x08
+  22 #define __punctuation   0x10
+  23 #define __space         0x20
+  24 #define __hex           0x40
+  25 #define __print         0x80
+  26 
+  27 #define __csym          0x01
+  28 #define __csymf         0x02
+  29 #define __octal         0x04
+  30 #define __blank         0x08
+  31 
+  32 
+  33 int             isalnum(int);
+  34 int             isalpha(int);
+  35 #ifndef __KeepNamespacePure__
+  36    int          isascii(int);
+  37 #endif
+  38 int             iscntrl(int);
+  39 #ifndef __KeepNamespacePure__
+  40    int          iscsym(int);
+  41    int          iscsymf(int);
+  42 #endif
+  43 int             isdigit(int);
+  44 int             isgraph(int);
+  45 int             islower(int);
+  46 #ifndef __KeepNamespacePure__
+  47    int          isodigit(int);
+  48 #endif
+  49 int             isprint(int);
+  50 int             ispunct(int);
+  51 int             isspace(int);
+  52 int             isupper(int);
+  53 int             isxdigit(int);
+  54 int             isblank(int);
+  55 #ifndef __KeepNamespacePure__
+  56    int          toascii(int);
+  57 #endif
+  58 
+  59 
+  60 #define isalnum(c)      ((__ctype)[(c)+1] & (__upper|__lower|__digit))
+  61 #define isalpha(c)      ((__ctype)[(c)+1] & (__upper|__lower))
+  62 #ifndef __KeepNamespacePure__
+  63    #define isascii(c)      ((unsigned)(c) < 0x0080)
+  64 #endif
+  65 #define iscntrl(c)      ((__ctype)[(c)+1] & __control)
+  66 #ifndef __KeepNamespacePure__
+  67    #define iscsym(c)       ((__ctype2)[(c)+1] & __csym)
+  68    #define iscsymf(c)      ((__ctype2)[(c)+1] & __csymf)
+  69 #endif
+  70 #define isdigit(c)      ((__ctype)[(c)+1] & __digit)
+  71 #define isgraph(c)      ((__ctype)[(c)+1] & (__upper|__lower|__digit|__punctuation))
+  72 #define islower(c)      ((__ctype)[(c)+1] & __lower)
+  73 #ifndef __KeepNamespacePure__
+  74    #define isodigit(c)     ((__ctype2)[(c)+1] & __octal)
+  75 #endif
+  76 #define isprint(c)      ((__ctype)[(c)+1] & __print)
+  77 #define ispunct(c)      ((__ctype)[(c)+1] & __punctuation)
+  78 #define isspace(c)      ((__ctype)[(c)+1] & __space)
+  79 #define isupper(c)      ((__ctype)[(c)+1] & __upper)
+  80 #define isxdigit(c)     ((__ctype)[(c)+1] & __hex)
+  81 #define isblank(c)      ((__ctype2)[(c)+1] & __blank)
+  82 #ifndef __KeepNamespacePure__
+  83    #define toascii(c)      ((c) & 0x7F)
+  84    int                     toint(char);
+  85 #endif
+  86 int                     tolower(int);
+  87 int                     toupper(int);
+  88 #ifndef __KeepNamespacePure__
+  89    #define _tolower(c)     ((c) | 0x20)
+  90    #define _toupper(c)     ((c) & 0x5F)
+  91 #endif
+  92 
+  93 #endif
    4 #include <time.h>
+   1 /****************************************************************
+   2 *
+   3 *  time.h - time and date functions
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __time__
+  14 #define __time__
+  15 
+  16 typedef unsigned long clock_t;
+  17 typedef unsigned long time_t;
+  18 
+  19 struct tm {
+  20         int tm_sec;
+  21         int tm_min;
+  22         int tm_hour;
+  23         int tm_mday;
+  24         int tm_mon;
+  25         int tm_year;
+  26         int tm_wday;
+  27         int tm_yday;
+  28         int tm_isdst;
+  29         };
+  30 
+  31 #ifndef __struct_timespec__
+  32 #define __struct_timespec__
+  33 struct timespec {
+  34         time_t tv_sec;
+  35         long   tv_nsec;
+  36         };
+  37 #endif
+  38 
+  39 clock_t         __clocks_per_sec(void);
+  40 #ifndef __KeepNamespacePure__
+  41    #define CLK_TCK      (__clocks_per_sec())
+  42 #endif
+  43 #define CLOCKS_PER_SEC  (__clocks_per_sec())
+  44 
+  45 #define TIME_UTC 1
+  46 
+  47 #ifndef NULL
+  48 #define NULL  (void *) 0L
+  49 #endif
+  50 
+  51 #ifndef __size_t__
+  52 #define __size_t__ 1
+  53 typedef unsigned long size_t;
+  54 #endif
+  55 
+  56 extern int      __useTimeTool;
+  57 
+  58 char           *asctime(const struct tm *);
+  59 clock_t         clock(void);
+  60 char           *ctime(const time_t *);
+  61 double          difftime(time_t, time_t);
+  62 struct tm      *gmtime(const time_t *);
+  63 struct tm      *localtime(const time_t *);
+  64 time_t          mktime(struct tm *);
+  65 size_t          strftime(char *, size_t, const char *, const struct tm *);
+  66 time_t          time(time_t *);
+  67 int             timespec_get(struct timespec *, int);
+  68 
+  69 #endif
    5 #include <string.h>
+   1 /****************************************************************
+   2 *
+   3 *  string.h - string processing
+   4 *
+   5 *  February 1989
+   6 *  Mike Westerfield
+   7 *
+   8 *  Copyright 1989
+   9 *  Byte Works, Inc.
+  10 *
+  11 ****************************************************************/
+  12 
+  13 #ifndef __string__
+  14 #define __string__
+  15 
+  16 #ifndef __size_t__
+  17 #define __size_t__ 1
+  18 typedef unsigned long size_t;
+  19 #endif
+  20 
+  21 #ifndef NULL
+  22 #define NULL  (void *) 0L
+  23 #endif
+  24 
+  25 #ifndef __KeepNamespacePure__
+  26    char        *c2pstr(const char *);
+  27 #endif
+  28 void           *memchr(const void *, int, size_t);
+  29 int             memcmp(const void *, const void *, size_t);
+  30 void           *memcpy(void *, const void *, size_t);
+  31 void           *memmove(void *, const void *, size_t);
+  32 void           *memset(void *, int, size_t);
+  33 #ifndef __KeepNamespacePure__
+  34    char        *p2cstr(const char *);
+  35 #endif
+  36 char           *strcat(char *, const char *);
+  37 char           *strchr(const char *, int);
+  38 int             strcmp(const char *, const char *);
+  39 int             strcoll(const char *, const char *);
+  40 char           *strcpy(char *, const char *);
+  41 size_t          strcspn(const char *, const char *);
+  42 char           *strerror(int);
+  43 size_t          strlen(const char *);
+  44 char           *strncat(char *, const char *, size_t);
+  45 int             strncmp(const char *, const char *, size_t);
+  46 char           *strncpy(char *, const char *, size_t);
+  47 char           *strpbrk(const char *, const char *);
+  48 #ifndef __KeepNamespacePure__
+  49    int          strpos(const char *, char);
+  50 #endif
+  51 char           *strrchr(const char *, int);
+  52 #ifndef __KeepNamespacePure__
+  53    char        *strrpbrk(const char *, const char *);
+  54    int          strrpos(const char *, char);
+  55 #endif
+  56 size_t          strspn(const char *, const char *);
+  57 char           *strstr(const char *, const char *);
+  58 char           *strtok(char *, const char *);
+  59 size_t          strxfrm(char *, const char *, size_t);
+  60 
+  61 
+  62 #endif
    6 
    7 extern void clear(void);
    8 extern void keypress(void);
@@ -67,39 +536,38 @@ ORCA/C 2.2.1
   65         printf("\n");
   66         
   67         printf("--------- C vs. Assembly ---------\n");
-  68         printf("C uppercase, press any when ready...\n");
+  68         printf("Press any when ready\n");
   69         keypress(); 
   70 
-  71         clock_t debut = clock();
-  72         for (i=0; i<30000; i++) {
-  73             ;
-  74             to_uppercase(my_string);
-  75         }
-  76         clock_t fin = clock();
-  77         double temps = (double)(fin - debut) / CLOCKS_PER_SEC;
-  78         printf("Time taken by C : %f seconds\n", temps);
-  79         printf("\n");
-  80 
-  81         printf("Assembly uppercase, press any when ready...\n");
-  82         keypress();
-  83         debut = clock(); 
-  84         for (i=0; i<30000; i++) {
-  85             uppers((long)my_string);
-  86         }
-  87         fin = clock();
-  88         double temps2 = (double)(fin - debut) / CLOCKS_PER_SEC;
-  89         printf("Time taken by Assembly : %f seconds\n", temps2);
-  90 
-  91         printf("\n");
-  92         printf("Press any key to quit...\n");
-  93         clear();
-  94         keypress();             // asm function to check for keypress
-  95         printf("\f");           //clears the screen via a ‘formfeed’
-  96         printf("Goodbye!\n");
-  97 
-  98         return 0;
-  99 }
- 100 #append "HelloAsmC.asm"
+  71         printf("Running...\n");
+  72         long loopcnt = 30000;
+  73         clock_t debut = clock();
+  74         for (i=0; i<loopcnt; i++) {
+  75             ;
+  76             to_uppercase(my_string);
+  77         }
+  78         clock_t fin = clock();
+  79         double temps = (double)(fin - debut) / CLOCKS_PER_SEC;
+  80         printf("Time taken by C : %f seconds\n", temps);
+  81 
+  82         debut = clock(); 
+  83         for (i=0; i<loopcnt; i++) {
+  84             uppers((long)my_string);
+  85         }
+  86         fin = clock();
+  87         double temps2 = (double)(fin - debut) / CLOCKS_PER_SEC;
+  88         printf("Time taken by Assembly : %f seconds\n", temps2);
+  89 
+  90         printf("\n");
+  91         printf("Press any key to quit...\n");
+  92         clear();
+  93         keypress();             // asm function to check for keypress
+  94         printf("\f");           //clears the screen via a ‘formfeed’
+  95         printf("Goodbye!\n");
+  96 
+  97         return 0;
+  98 }
+  99 #append "HelloAsmC.asm"
 
 0 errors found.
 

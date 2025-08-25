@@ -65,23 +65,22 @@ int main() {
         printf("\n");
         
         printf("--------- C vs. Assembly ---------\n");
-        printf("C uppercase, press any when ready...\n");
+        printf("Press any when ready\n");
         keypress(); 
 
+        printf("Running...\n");
+        long loopcnt = 30000;
         clock_t debut = clock();
-        for (i=0; i<30000; i++) {
+        for (i=0; i<loopcnt; i++) {
             ;
             to_uppercase(my_string);
         }
         clock_t fin = clock();
         double temps = (double)(fin - debut) / CLOCKS_PER_SEC;
         printf("Time taken by C : %f seconds\n", temps);
-        printf("\n");
 
-        printf("Assembly uppercase, press any when ready...\n");
-        keypress();
         debut = clock(); 
-        for (i=0; i<30000; i++) {
+        for (i=0; i<loopcnt; i++) {
             uppers((long)my_string);
         }
         fin = clock();
