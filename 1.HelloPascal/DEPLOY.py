@@ -126,8 +126,9 @@ def main():
     has_resources = os.path.exists(rez_file)
     if has_resources:
         if not run_command(f"iix compile {PRG}.rez keep={PRG}", "Compiling resource file"):
-            print("WARNING: Resource compilation failed, continuing...")
+            print("ERROR: Resource compilation failed!")
             has_resources = False
+            sys.exit(1)
         else:
             # Create archive to preserve resource fork
                 if not run_command(f"iix rexport -i cadius {PRG}", "Exporting resource with Cadius format"):
