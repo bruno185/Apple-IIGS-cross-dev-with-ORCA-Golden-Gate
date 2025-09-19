@@ -34,7 +34,7 @@ Note: Testing on a real Apple IIGS remains essential.
 
 - **ORCA (Byte Works)**: Complete development environment for Apple II, compilers for several languages (Assembler, C, Pascal, Modula, Basic, etc.). Available in the OPUS II package: https://juiced.gs/store/opus-ii-software, paid. Allows compiling and linking all types of programs for Apple IIGS.
 
-- **Golden Gate (Kelvin Sherlock)**: Compatibility layer for ORCA (and GNO/ME), allows running ORCA programs on PC for Apple IIGS: https://juiced.gs/store/golden-gate/, paid. Installing Golden Gate automatically updates the Windows PATH environment variable. Serves as an interface between ORCA tools and the Windows environment and thus enables cross-development.
+- **Golden Gate (Kelvin Sherlock)**: Compatibility layer for ORCA (and GNO/ME), allows running ORCA programs on PC for Apple IIGS: https://juiced.gs/store/golden-gate/, paid. Installing Golden Gate automatically updates the Windows PATH environment variable. Serves as an interface between ORCA tools and the Windows environment and thus enables cross-development. **IMPORTANT:** Version 2.1.0 (September 2025) is required! It is available here: https://juiced.gs/store/golden-gate/
 
 - **Ciderpress II (faddenSoft)**: Free Windows application to create and work with Apple II disk images in various formats: https://ciderpress2.com
 
