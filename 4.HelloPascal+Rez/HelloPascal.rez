@@ -1,3 +1,4 @@
 #include "types.rez"
 
-resource rPString (1, noCrossBank) {"AAAAAAAAAA"};
+resource rPString (1, noCrossBank) {"Hello resource 1!"};
+resource rPString (2, noCrossBank) {"Hello resource 2!"};
