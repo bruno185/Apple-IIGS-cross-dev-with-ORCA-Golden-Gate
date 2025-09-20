@@ -89,9 +89,9 @@ end.
 
 - First, adjust the configuration variables in the Python script DEPLOY.py:
 
-    - Modify line 19 by replacing "C:\\Apple IIgs\\Disks\\System.po" with the full path to your own disk image containing a GS/OS system.
+    - Modify line 19 by replacing "C:\\dev\\apple2gs\\system.po" with the full path to your own disk image containing a GS/OS system.
 
-    - Modify line 20 by replacing /SYSTEM/ with the destination prefix on this disk image
+    - Modify line 20 by replacing /SYSTEM6/ with the destination prefix on this disk image
 
     - Lines 17 and 18 respectively designate the main program file name and the extension (.pas, .c, .cc, etc., which tells ORCA which language and thus which compiler to use). These 2 lines are already correctly set for the HelloPascal example
 
