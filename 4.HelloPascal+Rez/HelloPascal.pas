@@ -57,7 +57,10 @@ begin
         if myhnd <> nil then
         begin
                 MoveTo(50, 50);
-                writeln('Resource loaded successfully');  
+                writeln('Resource loaded successfully');
+                write('Resource string = '); 
+                DrawString(pnt(myhnd^));  { Display the loaded string }
+
         end
         else
         begin
@@ -69,6 +72,7 @@ begin
                 writeln('Error code in hex: ', concat('$', s));
         end;
 
+        MoveTo(50, 100);
         writeln('Press Enter to exit...');
         readln;  { Wait for user input before closing the program }
 
