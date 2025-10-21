@@ -56,6 +56,7 @@ Le principe général est le suivant :
 | 4     | Compilation des ressources éventuelles | Golden Gate / ORCA      |
 | 5     | Copie sur une image disque             | Cadius                  |
 | 6     | Test/exécution dans l'émulateur        | KEGS ou Crossrunner     |
+| 7     | Test/exécutionsur un vrai Apple IIGS   | Apple IIGS              |
 
 L'étape 4 n'est nécessaire que si le code utilise un fichier de ressources (cf. exemple 4).
 
