@@ -15,7 +15,7 @@ from pathlib import Path
 # ===============================================
 # Change these variables to your own configuration
 PRG = "HelloC"  # Program name without extension
-lang = ".cc"
+lang = ".c"
 AppleDiskPath = "C:\\dev\\apple2gs\\system.po"
 ProdosDir = "/SYSTEM6/"
 # ===============================================
@@ -115,7 +115,7 @@ def main():
     print("=" * 50)
     
     # Compile the program
-    if not run_command(f"iix compile {PRG}{lang}", "Compiling source"):
+    if not run_command(f"iix compile {PRG}{lang}", "Compiling Pascal source"):
         sys.exit(1)
     
     # Link the program
@@ -126,12 +126,11 @@ def main():
     has_resources = os.path.exists(rez_file)
     if has_resources:
         if not run_command(f"iix compile {PRG}.rez keep={PRG}", "Compiling resource file"):
-            print("ERROR: Resource compilation failed!")
+            print("WARNING: Resource compilation failed, continuing...")
             has_resources = False
-            sys.exit(1)
         else:
             # Create archive to preserve resource fork
-                if not run_command(f"iix rexport -i cadius {PRG}", "Exporting resource with Cadius format"):
+                if not run_command(f"iix export cadius {PRG}", "Exporting resource with Cadius format"):
                     print("WARNING: Export failed, will copy executable directly")
                     has_resources = False
 

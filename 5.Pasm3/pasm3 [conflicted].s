@@ -30,8 +30,8 @@ debug   start
 ; get 2 bytes parameter value in X
 ;
 debug2 START
-parm	equ	4	passed parameter
-ret	equ	1	return address
+parm	equ	4	;passed parameter
+ret	equ	1	;return address
 	
         tsc             ;record current stack pointer
         phd             ;save old DP
@@ -55,8 +55,8 @@ ret	equ	1	return address
 ; get 4 bytes parameter value in X/A (hi/lo words)
 ;
 debug4 START
-parm	equ	4	passed parameter
-ret	equ	1	return address
+parm	equ	4	;passed parameter
+ret	equ	1	;return address
         
         tsc             ;record current stack pointer
         phd             ;save old DP
@@ -84,8 +84,8 @@ ret	equ	1	return address
         END	 
 
 dblong  START
-parm	equ	4	passed parameter
-ret	equ	1	return address
+parm	equ	4	;passed parameter
+ret	equ	1	;return address
         
         tsc             ;record current stack pointer
         phd             ;save old DP

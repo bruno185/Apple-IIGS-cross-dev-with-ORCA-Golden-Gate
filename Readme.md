@@ -344,7 +344,7 @@ In this example, the "HelloPascal.bat" file performs the same deployment operati
 
 ### Example 5: Pascal program passing data with assembly functions
 This example is in the "5.Pasm3" directory.
-The Pascal program passes parameters to assembly language functions, which in turn return values to the main program. These functions illustrate parameter passing between code in C compiled by ORCA/Pascal and code in assembly compiled by ORCA/M.
+The Pascal program passes parameters to assembly language functions, which in turn return values to the main program. These functions illustrate parameter passing between code in Pascal compiled by ORCA/Pascal and code in assembly compiled by ORCA/M.
 
 ### Example 6: C program passing data with assembly functions
 This example is in the "6.HelloAsm C" directory, it is very similar to the previous example.

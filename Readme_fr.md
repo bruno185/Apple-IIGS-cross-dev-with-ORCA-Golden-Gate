@@ -345,7 +345,7 @@ Dans cet exemple, le fichier "HelloPascal.bat" effectue les mêmes opérations d
 
 ### Exemple 5 : programme en Pascal passage de données avec des fonctions en assembleur
 Cet exemple est dans le répertoire "5.Pasm3".
-Le programme en Pascal passe des paramètres à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en C compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
+Le programme en Pascal passe des paramètres à des fonctions en langage assembleur, qui à leur tour renvoient des valeurs au programme principal. Ces fonctions illustrent le passage de paramètres entre le code en Pascal compilé par ORCA/Pascal et le code en assembleur compilé par ORCA/M.
 
 ### Exemple 6 : programme en C passage de données avec des fonctions en assembleur
 Cet exemple est dans le répertoire "6.HelloAsm C", il est très similaire à l'exemple précédent.
